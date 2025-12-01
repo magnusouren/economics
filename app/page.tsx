@@ -12,7 +12,7 @@ import Taxes from '@/views/taxes';
 export default function Home() {
     return (
         <>
-            <div className='flex flex-col w-full m-auto justify-center mt-6'>
+            <div className='flex flex-col w-full m-auto justify-center mt-2'>
                 <p className='max-w-3xl'>
                     En enkel økonomikalkulator for å få oversikt over din
                     personlige økonomi. Den hjelper deg å beregne inntekter,
