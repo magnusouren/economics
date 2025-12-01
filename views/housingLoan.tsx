@@ -31,9 +31,7 @@ export default function HousingLoan() {
     return (
         <section className='w-full my-8'>
             <div className='flex items-center justify-between mb-2'>
-                <h2 className='text-xl font-semibold'>
-                    Boliglån – {totalLoanAmount.toLocaleString()} kr
-                </h2>
+                <h2 className='text-xl font-semibold'>Boliglån</h2>
                 <Button variant='outline' size='sm' onClick={addLoan}>
                     + Legg til lån
                 </Button>

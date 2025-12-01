@@ -12,13 +12,12 @@ import Taxes from '@/views/taxes';
 export default function Home() {
     return (
         <>
-            <div className='flex flex-col w-full m-auto justify-center'>
-                <h1 className='text-4xl mb-4 font-bold'>Økonomikalkulator</h1>
-                <p>
-                    Lorem ipsum dolor sit amet consectetur, adipisicing elit.
-                    Repellat sed tempora ea dolorem, nesciunt temporibus amet
-                    cum, error quaerat provident libero repudiandae aliquam odit
-                    similique harum hic consequuntur, minus vel.
+            <div className='flex flex-col w-full m-auto justify-center mt-6'>
+                <p className='max-w-3xl'>
+                    En enkel økonomikalkulator for å få oversikt over din
+                    personlige økonomi. Den hjelper deg å beregne inntekter,
+                    utgifter, lån og skatter for å få en bedre forståelse av din
+                    økonomiske situasjon og muligheter.
                 </p>
             </div>
             <section className='mt-8'>

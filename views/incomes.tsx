@@ -18,9 +18,7 @@ export default function Incomes() {
     return (
         <section className='w-full my-8'>
             <div className='flex items-center justify-between'>
-                <h2 className='text-xl font-semibold'>
-                    Inntekter – {totalIncome.toLocaleString()} kr
-                </h2>
+                <h2 className='text-xl font-semibold'>Inntekter</h2>
                 <Button variant='outline' size='sm' onClick={() => addIncome()}>
                     <Plus /> Legg til inntekt
                 </Button>
@@ -30,9 +28,9 @@ export default function Incomes() {
             </p>
             {incomes.length !== 0 && (
                 <div className='overflow-auto rounded-md border'>
-                    <table className='w-full table-fixed'>
+                    <table className='w-full table-fixed text-sm'>
                         <thead>
-                            <tr className='bg-muted text-sm'>
+                            <tr className='bg-muted'>
                                 <th className='p-2 text-left w-3/4'>Kilde</th>
                                 <th className='p-2 w-1/4 text-left'>
                                     Beløp (kr)
@@ -86,6 +84,14 @@ export default function Incomes() {
                                     </td>
                                 </tr>
                             ))}
+
+                            <tr className='border-t font-semibold'>
+                                <td className='p-2 pl-4 '>Totalt</td>
+                                <td className='p-2 pl-4 '>
+                                    {totalIncome.toLocaleString()}
+                                </td>
+                                <td> </td>
+                            </tr>
                         </tbody>
                     </table>
                 </div>

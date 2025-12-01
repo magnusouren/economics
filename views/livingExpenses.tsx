@@ -45,9 +45,7 @@ export default function LivingExpenses() {
     return (
         <section className='w-full my-8'>
             <div className='flex items-center justify-between mb-2'>
-                <h2 className='text-xl font-semibold'>
-                    Levekostnader – {totalLivingCosts.toLocaleString()} kr / mnd
-                </h2>
+                <h2 className='text-xl font-semibold'>Levekostnader</h2>
             </div>
             <p className='mt-2 mb-4 text-muted-foreground'>
                 Legg inn løpende levekostnader her. Første kolonne er en

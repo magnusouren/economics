@@ -1,4 +1,3 @@
-import React from 'react';
 import useStore, { StoreState } from '@/lib/store';
 import type { Loan } from '@/types';
 
@@ -74,13 +73,9 @@ export default function Summary() {
     );
 
     const totalMonthlyExpenses =
-        housingFixed +
-        personalFixed +
-        livingMonthly +
-        loanMonthlyPayments +
-        monthlyTax;
+        housingFixed + personalFixed + livingMonthly + loanMonthlyPayments;
 
-    const netMonthly = monthlyIncomeGross - totalMonthlyExpenses;
+    const balance = monthlyIncomeGross - monthlyTax - totalMonthlyExpenses;
 
     function fmt(n: number) {
         return Math.round(n).toLocaleString();
@@ -155,7 +150,7 @@ export default function Summary() {
                         </tr>
 
                         <tr className='odd:bg-background even:bg-muted/5'>
-                            <td className='p-2'>Levekostnader (sum)</td>
+                            <td className='p-2'>Levekostnader</td>
                             <td className='p-2 text-right'>
                                 {fmt(livingMonthly)}
                             </td>
@@ -176,9 +171,7 @@ export default function Summary() {
 
                         <tr className='text-lg font-bold bg-muted/10'>
                             <td className='p-2'>Balanse per måned</td>
-                            <td className='p-2 text-right'>
-                                {fmt(netMonthly)}
-                            </td>
+                            <td className='p-2 text-right'>{fmt(balance)}</td>
                         </tr>
                     </tbody>
                 </table>

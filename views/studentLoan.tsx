@@ -31,9 +31,7 @@ export default function StudentLoan() {
     return (
         <section className='w-full my-8'>
             <div className='flex items-center justify-between mb-2'>
-                <h2 className='text-xl font-semibold'>
-                    Studielån – {totalLoanAmount.toLocaleString()} kr
-                </h2>
+                <h2 className='text-xl font-semibold'>Studielån</h2>
                 <Button variant='outline' size='sm' onClick={handleAdd}>
                     + Legg til lån
                 </Button>

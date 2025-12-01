@@ -68,7 +68,7 @@ export default function Taxes() {
             </div>
 
             <div className='overflow-auto rounded-md border'>
-                <table className='w-full table-fixed'>
+                <table className='w-full table-fixed text-sm'>
                     <thead>
                         <tr className='bg-muted text-sm'>
                             <th className='p-2 text-left'>Beskrivelse</th>
@@ -230,6 +230,17 @@ export default function Taxes() {
                             <td className='p-2 text-right'>
                                 {Math.round(
                                     nettoInntektForelopig
+                                ).toLocaleString()}{' '}
+                                kr
+                            </td>
+                        </tr>
+
+                        {/* Netto månedlig */}
+                        <tr>
+                            <td className='p-2'>Netto inntekt per måned</td>
+                            <td className='p-2 text-right'>
+                                {Math.round(
+                                    nettoInntektForelopig / 12
                                 ).toLocaleString()}{' '}
                                 kr
                             </td>

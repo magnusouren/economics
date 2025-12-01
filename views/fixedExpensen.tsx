@@ -75,10 +75,7 @@ export default function FixedExpenses() {
     return (
         <section className='w-full my-8'>
             <div className='flex items-center justify-between mb-2'>
-                <h2 className='text-xl font-semibold'>
-                    Faste utgifter – {totalFixedExpenses.toLocaleString()} kr /
-                    mnd
-                </h2>
+                <h2 className='text-xl font-semibold'>Faste utgifter</h2>
             </div>
             <p className='mt-2 mb-4 text-muted-foreground'>
                 Legg til dine faste utgifter her. Du kan dele dem inn i
@@ -91,7 +88,7 @@ export default function FixedExpenses() {
                 <div>
                     <h3 className='font-semibold mb-2'>Bolig</h3>
                     <div className='overflow-auto rounded-md border'>
-                        <table className='w-full table-fixed'>
+                        <table className='w-full table-fixed text-sm'>
                             <thead>
                                 <tr className='bg-muted text-sm'>
                                     <th className='p-2 text-left w-3/4'>
@@ -179,9 +176,9 @@ export default function FixedExpenses() {
                 <div>
                     <h3 className='font-semibold mb-2'>Personlig</h3>
                     <div className='overflow-auto rounded-md border'>
-                        <table className='w-full table-fixed'>
+                        <table className='w-full table-fixed text-sm'>
                             <thead>
-                                <tr className='bg-muted text-sm'>
+                                <tr className='bg-muted'>
                                     <th className='p-2 text-left w-3/4'>
                                         Beskrivelse
                                     </th>
@@ -237,7 +234,7 @@ export default function FixedExpenses() {
                                         </td>
                                     </tr>
                                 ))}
-                                <tr className='border-t font-semibold text-sm'>
+                                <tr className='border-t font-semibold'>
                                     <td className='p-2 pl-4 '>Totalt</td>
                                     <td className='p-2 pl-4 '>
                                         {personal
