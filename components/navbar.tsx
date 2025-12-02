@@ -13,9 +13,6 @@ export default function Navbar() {
                         <div className='text-lg sm:text-2xl font-semibold'>
                             Økonomikalkulator
                         </div>
-                        <div className='hidden sm:block text-sm text-muted-foreground'>
-                            En enkel oversikt over inntekter og utgifter
-                        </div>
                     </div>
 
                     <div className='flex items-center gap-3'>

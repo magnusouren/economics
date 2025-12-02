@@ -37,6 +37,10 @@ export default function LivingExpenses() {
         addLivingCostAction({ description: '', amount: 0 });
     }
 
+    function autoGenerateLivingCosts() {
+        // TODO: Implement logic to auto-generate living costs based on some criteria
+    }
+
     const totalLivingCosts = livingCosts.reduce(
         (total, item) => total + item.amount,
         0
@@ -46,6 +50,13 @@ export default function LivingExpenses() {
         <section className='w-full my-8'>
             <div className='flex items-center justify-between mb-2'>
                 <h2 className='text-xl font-semibold'>Levekostnader</h2>
+                <Button
+                    variant='outline'
+                    size='sm'
+                    onClick={autoGenerateLivingCosts}
+                >
+                    Autogenerer levekostnader
+                </Button>
             </div>
             <p className='mt-2 mb-4 text-muted-foreground'>
                 Legg inn løpende levekostnader her. Første kolonne er en
@@ -110,10 +121,9 @@ export default function LivingExpenses() {
                         ))}
                         <tr className='border-t font-semibold text-sm'>
                             <td className='p-2 pl-4 '>Totalt</td>
-                            <td className='p-2 pl-4 '>
+                            <td className='p-2 pl-4 ' colSpan={2}>
                                 {totalLivingCosts.toLocaleString()} kr / mnd
                             </td>
-                            <td></td>
                         </tr>
                     </tbody>
                 </table>
@@ -121,7 +131,7 @@ export default function LivingExpenses() {
 
             <div className='mt-2'>
                 <Button variant='outline' onClick={addLivingCost}>
-                    + Legg til levekostnad
+                    + Legg til kostnad
                 </Button>
             </div>
         </section>

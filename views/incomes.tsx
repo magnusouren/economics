@@ -31,8 +31,10 @@ export default function Incomes() {
                     <table className='w-full table-fixed text-sm'>
                         <thead>
                             <tr className='bg-muted'>
-                                <th className='p-2 text-left w-3/4'>Kilde</th>
-                                <th className='p-2 w-1/4 text-left'>
+                                <th className='p-2 text-left w-2/3 md:w-3/4'>
+                                    Kilde
+                                </th>
+                                <th className='p-2 w-1/3 md:w-1/4 text-left'>
                                     Beløp (kr)
                                 </th>
                                 <th className='w-12'> </th>

@@ -148,7 +148,7 @@ export default function FixedExpenses() {
                                 ))}
                                 <tr className='border-t font-semibold text-sm'>
                                     <td className='p-2 pl-4 '>Totalt</td>
-                                    <td className='p-2 pl-4 '>
+                                    <td className='p-2 pl-4 ' colSpan={2}>
                                         {housing
                                             .reduce(
                                                 (total, { item }) =>
@@ -158,7 +158,6 @@ export default function FixedExpenses() {
                                             .toLocaleString()}{' '}
                                         kr / mnd
                                     </td>
-                                    <td></td>
                                 </tr>
                             </tbody>
                         </table>
@@ -168,7 +167,7 @@ export default function FixedExpenses() {
                             variant='outline'
                             onClick={() => addExpense('housing')}
                         >
-                            + Legg til bolig-utgift
+                            + Legg til utgift
                         </Button>
                     </div>
                 </div>
@@ -236,7 +235,7 @@ export default function FixedExpenses() {
                                 ))}
                                 <tr className='border-t font-semibold'>
                                     <td className='p-2 pl-4 '>Totalt</td>
-                                    <td className='p-2 pl-4 '>
+                                    <td className='p-2 pl-4 ' colSpan={2}>
                                         {personal
                                             .reduce(
                                                 (total, { item }) =>
@@ -246,7 +245,6 @@ export default function FixedExpenses() {
                                             .toLocaleString()}{' '}
                                         kr / mnd
                                     </td>
-                                    <td></td>
                                 </tr>
                             </tbody>
                         </table>
@@ -256,7 +254,7 @@ export default function FixedExpenses() {
                             variant='outline'
                             onClick={() => addExpense('personal')}
                         >
-                            + Legg til personlig utgift
+                            + Legg til utgift
                         </Button>
                     </div>
                 </div>

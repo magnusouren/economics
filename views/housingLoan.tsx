@@ -37,8 +37,10 @@ export default function HousingLoan() {
                 </Button>
             </div>
             <p className='mt-2 mb-4 text-muted-foreground'>
-                Legg til informasjon om boliglån. Feltene oppdaterer skjemaets
-                data objekt direkte.
+                Legg til informasjon om boliglån. Du kan legge til flere lån
+                dersom du har det. Per nå støttes kun lån med en lånetaker,
+                dersom det er flere lånetakere på lånet må du legge inn dine
+                andeler av lånet her.
             </p>
 
             {housingLoans.length !== 0 && (

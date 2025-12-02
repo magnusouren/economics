@@ -109,46 +109,51 @@ export default function StudentLoan() {
             </div>
 
             <p className='mt-2 mb-4 text-muted-foreground'>
-                Legg inn informasjon om ditt studielån her. Du kan legge til
-                flere lån dersom du har flere. Du kan også legge til andre typer
-                lån her dersom du har det.
+                Legg inn informasjon om ditt studielån her. Dersom du har tatt
+                opp maksimalt lån og fått tildelt fullt stipend, kan du bruke
+                knappen under for å autogenerere lånebeløpet basert på start- og
+                sluttdato for studielånet ditt. Har du tatt opp mer lån eller i
+                ulike perioder kan du manuelt endre lånet eller legge inn dette
+                som nye lån.
             </p>
 
-            <div className='mt-2 mb-4 text-muted-foreground flex gap-2 justify-start align-center'>
-                <p className='mt-1.5'>
-                    Forhåndsutfyll lånebeløp basert på når du studerte:
-                </p>
-
-                <div className='flex justify-start gap-2'>
+            <div className='mt-2 mb-4 p-2 md:pl-4 border rounded-md'>
+                <div className='flex justify-start gap-4 items-end md:items-center flex-wrap'>
                     {/* FROM */}
-                    <Label htmlFor='from-year' className='mt-2'>
-                        Fra
-                    </Label>
-                    <NativeSelect name='from-year'>
-                        {Object.entries(loanAmounts).map(([year, amount]) => (
-                            <NativeSelectOption key={year} value={amount}>
-                                {year}
-                            </NativeSelectOption>
-                        ))}
-                    </NativeSelect>
+                    <div className='flex flex-col gap-2 md:flex-row'>
+                        <Label htmlFor='from-year'>Fra:</Label>
+                        <NativeSelect name='from-year'>
+                            {Object.entries(loanAmounts).map(
+                                ([year, amount]) => (
+                                    <NativeSelectOption
+                                        key={year}
+                                        value={amount}
+                                    >
+                                        {year}
+                                    </NativeSelectOption>
+                                )
+                            )}
+                        </NativeSelect>
+                    </div>
 
                     {/* TO */}
-                    <Label htmlFor='to-year' className='mt-2'>
-                        Til
-                    </Label>
-                    <NativeSelect name='to-year'>
-                        {Object.entries(loanAmounts).map(([year, amount]) => (
-                            <NativeSelectOption key={year} value={amount}>
-                                {year}
-                            </NativeSelectOption>
-                        ))}
-                    </NativeSelect>
+                    <div className='flex flex-col gap-2 md:flex-row'>
+                        <Label htmlFor='to-year'>Til:</Label>
+                        <NativeSelect name='to-year'>
+                            {Object.entries(loanAmounts).map(
+                                ([year, amount]) => (
+                                    <NativeSelectOption
+                                        key={year}
+                                        value={amount}
+                                    >
+                                        {year}
+                                    </NativeSelectOption>
+                                )
+                            )}
+                        </NativeSelect>
+                    </div>
 
-                    <Button
-                        variant='outline'
-                        size='sm'
-                        onClick={handleAutoFill}
-                    >
+                    <Button variant='outline' onClick={handleAutoFill}>
                         Sett lånebeløp
                     </Button>
                 </div>
