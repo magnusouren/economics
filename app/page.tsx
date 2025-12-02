@@ -1,5 +1,6 @@
 'use client';
 
+import { Separator } from '@/components/ui/separator';
 // top-level page — views import UI components themselves and read the store
 import FixedExpenses from '@/views/fixedExpensen';
 import HousingLoan from '@/views/housingLoan';
@@ -27,7 +28,7 @@ export default function Home() {
                     skatter, lån, og andre utgifter.
                 </p>
             </div>
-            <section className='mt-8'>
+            <section className='mt-24'>
                 <Incomes />
                 <HousingLoan />
                 <StudentLoan />
