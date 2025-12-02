@@ -51,7 +51,7 @@ export default function LivingExpenses() {
             <div className='flex items-center justify-between mb-2'>
                 <h2 className='text-xl font-semibold'>Levekostnader</h2>
                 <Button
-                    variant='outline'
+                    variant='secondary'
                     size='sm'
                     onClick={autoGenerateLivingCosts}
                 >

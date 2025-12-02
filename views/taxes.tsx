@@ -256,11 +256,11 @@ export default function Taxes() {
                 </table>
             </div>
 
-            <div className='mt-2'>
+            {/* <div className='mt-2'>
                 <Button disabled variant='outline'>
                     + Legg til fradrag (kommer snart)
                 </Button>
-            </div>
+            </div> */}
         </section>
     );
 }

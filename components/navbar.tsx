@@ -11,7 +11,7 @@ export default function Navbar() {
                 <div className='flex items-center justify-between h-16'>
                     <div className='flex items-center gap-3'>
                         <div className='text-lg sm:text-2xl font-semibold'>
-                            Økonomikalkulator
+                            Økonomikalkulator 💰
                         </div>
                     </div>
 
