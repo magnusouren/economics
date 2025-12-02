@@ -33,7 +33,7 @@ type AutoFormState = {
     gravid0: string;
     student0: string;
     pensjonist0: string;
-    lang: 'no' | 'en';
+    lang: 'nb' | 'en';
 };
 
 type BudgetResponse = {
@@ -77,7 +77,7 @@ export default function LivingExpenses() {
         gravid0: '0',
         student0: '0',
         pensjonist0: '0',
-        lang: 'no',
+        lang: 'nb',
     });
 
     useEffect(() => {
@@ -127,6 +127,23 @@ export default function LivingExpenses() {
 
             const params = new URLSearchParams(normalizedForm);
 
+            const parseBudgetResponse = (body: string): BudgetResponse => {
+                try {
+                    return JSON.parse(body) as BudgetResponse;
+                } catch (error) {
+                    const start = body.indexOf('{');
+                    const end = body.lastIndexOf('}');
+
+                    if (start !== -1 && end !== -1 && end > start) {
+                        return JSON.parse(
+                            body.slice(start, end + 1)
+                        ) as BudgetResponse;
+                    }
+
+                    throw error;
+                }
+            };
+
             try {
                 const response = await fetch(
                     `https://kalkulator.referansebudsjett.no/php/resultat_as_json.php?${params.toString()}`,
@@ -140,7 +157,7 @@ export default function LivingExpenses() {
                     throw new Error('Klarte ikke å hente levekostnader');
                 }
 
-                const data = (await response.json()) as BudgetResponse;
+                const data = parseBudgetResponse(await response.text());
 
                 const buildCosts = (
                     amounts: Record<string, number>,
