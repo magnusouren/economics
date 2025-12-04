@@ -1,8 +1,5 @@
 'use client';
 
-import React from 'react';
-import { User } from 'lucide-react';
-import { Button } from '@/components/ui/button';
 import Link from 'next/link';
 
 export default function Navbar() {
@@ -14,6 +11,22 @@ export default function Navbar() {
                         <div className='text-lg sm:text-2xl font-semibold text-brandBlue'>
                             <Link href='/'>NETTO</Link>
                         </div>
+                    </div>
+                    <div>
+                        <nav className='flex items-center gap-4'>
+                            <Link
+                                href='/'
+                                className='text-sm font-medium text-foreground/70 hover:text-foreground'
+                            >
+                                Kalkulator
+                            </Link>
+                            <Link
+                                href='/loan'
+                                className='text-sm font-medium text-foreground/70 hover:text-foreground'
+                            >
+                                Nedbetalingsplan lån
+                            </Link>
+                        </nav>
                     </div>
 
                     {/* <div className='flex items-center gap-3'>

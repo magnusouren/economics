@@ -44,37 +44,30 @@ function generateAmortizationSchedule(loan: {
     const addMonths = (d: Date, n: number) =>
         new Date(d.getFullYear(), d.getMonth() + n, d.getDate());
 
-    const calculateTermsLeftThisYear = (date: Date) => {
-        const currentYear = date.getFullYear();
-        const monthsLeft = 12 - date.getMonth();
-        const termsLeft = Math.ceil((monthsLeft / 12) * termsPerYear);
-
-        console.log({ currentYear, monthsLeft, termsLeft });
-
-        return Math.min(termsLeft, numberOfTerms);
-    };
-    const termsLeftThisYearValue = calculateTermsLeftThisYear(currentDate);
+    const termsLeftThisYear =
+        termsPerYear - (currentDate.getMonth() % termsPerYear);
+    const initialTerms = Math.min(termsLeftThisYear, numberOfTerms);
 
     let yearInterest = 0;
     let yearPrincipal = 0;
     let yearFees = 0;
     let yearPaid = 0;
 
-    for (let term = 0; term <= numberOfTerms; term++) {
+    for (let term = 1; term <= numberOfTerms; term++) {
         const interest = balance * ratePerTerm;
-        const principal = termPayment - interest;
+        const principal = Math.min(termPayment - interest, balance); // prevent overpayment
         balance -= principal;
-        if (term === numberOfTerms) balance = 0;
 
-        const payment = termPayment + monthlyFee;
+        const payment = principal + interest + monthlyFee;
 
-        // Format date as "MMM YYYY"
+        // Format date
         const formattedDate = currentDate.toLocaleString('no-NO', {
             year: 'numeric',
             month: 'short',
         });
 
-        if (term < termsLeftThisYearValue) {
+        // Save first 12 months
+        if (term <= initialTerms) {
             first12Months.push({
                 term,
                 date: formattedDate,
@@ -86,15 +79,14 @@ function generateAmortizationSchedule(loan: {
             });
         }
 
-        // Accumulate yearly summary values
+        // Year accumulation
         const entryYear = currentDate.getFullYear();
-
         yearInterest += interest;
         yearPrincipal += principal;
         yearFees += monthlyFee;
         yearPaid += payment;
 
-        // If the next payment will be next year → close this year
+        // Check next year
         const nextDate = addMonths(currentDate, 1);
         const nextYear = nextDate.getFullYear();
 
@@ -108,13 +100,13 @@ function generateAmortizationSchedule(loan: {
                 endBalance: balance,
             });
 
-            // Reset accumulators
             yearInterest = 0;
             yearPrincipal = 0;
             yearFees = 0;
             yearPaid = 0;
         }
 
+        // Advance date
         currentDate = nextDate;
     }
 
@@ -173,23 +165,23 @@ interface HousingLoanDataRowYearly {
 // --- Component ------------------------
 // --------------------------------------
 
-export default function HousingLoans() {
+export default function Loans() {
     const data = useStore((s: StoreState) => s.data);
-    const { housingLoans } = data;
+    const { housingLoans, loans } = data;
 
     return (
         <>
             <div className='w-full mt-8'>
                 <h1 className='text-4xl md:text-5xl font-bold mb-4 text-brandBlue'>
-                    Nedbetalingsplan for boliglån
+                    Nedbetalingsplan for Lån
                 </h1>
                 <TypographyP>
-                    Her finner du detaljerte beregninger av alle dine boliglån,
-                    inkludert nedbetaling, renter og restgjeld for hver termin.
+                    Her finner du detaljerte beregninger av alle lån, inkludert
+                    nedbetaling, renter og restgjeld for hver termin.
                 </TypographyP>
             </div>
 
-            <section className='mt-4'>
+            <section className='my-8'>
                 <TypographyH2>Dine boliglån</TypographyH2>
 
                 {housingLoans.length === 0 && (
@@ -201,6 +193,158 @@ export default function HousingLoans() {
 
                 {housingLoans.length > 0 &&
                     housingLoans.map((loan, index) => {
+                        const schedule = generateAmortizationSchedule(loan);
+
+                        return (
+                            <div key={index} className='my-4 overflow-auto'>
+                                <TypographyH3>
+                                    Nedbetalingsoversikt, {loan.description}
+                                </TypographyH3>
+
+                                <table className='w-full table-auto text-sm border-collapse'>
+                                    <thead className='bg-gray-100'>
+                                        <tr>
+                                            <th className='p-2 text-left'>
+                                                Termin
+                                            </th>
+                                            <th className='p-2 text-left'>
+                                                Terminbeløp
+                                            </th>
+                                            <th className='p-2 text-left'>
+                                                Renter
+                                            </th>
+                                            <th className='p-2 text-left'>
+                                                Avdrag
+                                            </th>
+                                            <th className='p-2 text-left'>
+                                                Gebyr
+                                            </th>
+                                            <th className='p-2 text-left'>
+                                                Restgjeld
+                                            </th>
+                                        </tr>
+                                    </thead>
+
+                                    <tbody>
+                                        {/* First 12 months */}
+                                        {schedule.first12Months.map((row) => (
+                                            <tr
+                                                key={row.term}
+                                                className='border-b'
+                                            >
+                                                <td className='p-2'>
+                                                    {row.date}
+                                                </td>
+                                                <td className='p-2'>
+                                                    {formatNumberToNOK(
+                                                        row.payment
+                                                    )}
+                                                </td>
+                                                <td className='p-2'>
+                                                    {formatNumberToNOK(
+                                                        row.interest
+                                                    )}
+                                                </td>
+                                                <td className='p-2'>
+                                                    {formatNumberToNOK(
+                                                        row.principal
+                                                    )}
+                                                </td>
+                                                <td className='p-2'>
+                                                    {formatNumberToNOK(row.fee)}
+                                                </td>
+                                                <td className='p-2'>
+                                                    {formatNumberToNOK(
+                                                        row.balance
+                                                    )}
+                                                </td>
+                                            </tr>
+                                        ))}
+
+                                        {/* Yearly summaries */}
+                                        {schedule.yearGroups.map((year) => (
+                                            <tr
+                                                key={'year-' + year.year}
+                                                className='border-b bg-gray-50 font-semibold'
+                                            >
+                                                <td className='p-2'>
+                                                    {year.year}
+                                                </td>
+                                                <td className='p-2'>
+                                                    {formatNumberToNOK(
+                                                        year.totalPaid
+                                                    )}
+                                                </td>
+                                                <td className='p-2'>
+                                                    {formatNumberToNOK(
+                                                        year.totalInterest
+                                                    )}
+                                                </td>
+                                                <td className='p-2'>
+                                                    {formatNumberToNOK(
+                                                        year.totalPrincipal
+                                                    )}
+                                                </td>
+                                                <td className='p-2'>
+                                                    {formatNumberToNOK(
+                                                        year.totalFees
+                                                    )}
+                                                </td>
+                                                <td className='p-2'>
+                                                    {formatNumberToNOK(
+                                                        year.endBalance
+                                                    )}
+                                                </td>
+                                            </tr>
+                                        ))}
+                                    </tbody>
+
+                                    <tfoot className='bg-gray-50 font-semibold'>
+                                        <tr>
+                                            <td className='p-2'>Totalt</td>
+                                            <td className='p-2'>
+                                                {formatNumberToNOK(
+                                                    schedule.totals.totalPaid
+                                                )}
+                                            </td>
+                                            <td className='p-2'>
+                                                {formatNumberToNOK(
+                                                    schedule.totals
+                                                        .totalInterest
+                                                )}
+                                            </td>
+                                            <td className='p-2'>
+                                                {formatNumberToNOK(
+                                                    schedule.totals
+                                                        .totalPrincipal
+                                                )}
+                                            </td>
+                                            <td className='p-2'>
+                                                {formatNumberToNOK(
+                                                    schedule.totals.totalFees
+                                                )}
+                                            </td>
+                                            <td className='p-2'>–</td>
+                                        </tr>
+                                    </tfoot>
+                                </table>
+                            </div>
+                        );
+                    })}
+            </section>
+
+            <section className='mt-4'>
+                <TypographyH2>Andre Lån</TypographyH2>
+
+                {loans.length === 0 && (
+                    <TypographyP>
+                        Du har ikke lagt til noen boliglån enda. Legg til et
+                        boliglån på forsiden for å se nedbetalingsplanen her.
+                    </TypographyP>
+                )}
+
+                {loans.length > 0 &&
+                    loans.map((loan, index) => {
                         const schedule = generateAmortizationSchedule(loan);
 
                         return (
@@ -246,30 +390,25 @@ export default function HousingLoans() {
                                                 <td className='p-2'>
                                                     {formatNumberToNOK(
                                                         row.payment
-                                                    )}{' '}
-                                                    kr
+                                                    )}
                                                 </td>
                                                 <td className='p-2'>
                                                     {formatNumberToNOK(
                                                         row.interest
-                                                    )}{' '}
-                                                    kr
+                                                    )}
                                                 </td>
                                                 <td className='p-2'>
                                                     {formatNumberToNOK(
                                                         row.principal
-                                                    )}{' '}
-                                                    kr
+                                                    )}
                                                 </td>
                                                 <td className='p-2'>
-                                                    {formatNumberToNOK(row.fee)}{' '}
-                                                    kr
+                                                    {formatNumberToNOK(row.fee)}
                                                 </td>
                                                 <td className='p-2'>
                                                     {formatNumberToNOK(
                                                         row.balance
-                                                    )}{' '}
-                                                    kr
+                                                    )}
                                                 </td>
                                             </tr>
                                         ))}

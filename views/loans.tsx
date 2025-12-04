@@ -10,6 +10,7 @@ import {
 import { Label } from '@/components/ui/label';
 import { TypographyH2 } from '@/components/typography/typographyH2';
 import { TypographyP } from '@/components/typography/typographyP';
+import { TypographyH3 } from '@/components/typography/typographyH3';
 
 const loanAmounts: Record<string, number> = {
     '2025-2026': 166859,
@@ -38,7 +39,7 @@ const loanAmounts: Record<string, number> = {
     '2002-2003': 80000,
 };
 
-export default function StudentLoan() {
+export default function Loans() {
     const loans = useStore((s: StoreState) => s.data.loans);
     const addLoan = useStore((s: StoreState) => s.addLoan);
     const updateLoan = useStore((s: StoreState) => s.updateLoan);
@@ -98,17 +99,21 @@ export default function StudentLoan() {
 
     return (
         <section className='w-full my-8'>
-            <TypographyH2>Studielån</TypographyH2>
+            <TypographyH2>Andre Lån</TypographyH2>
             <TypographyP>
-                Legg inn informasjon om ditt studielån her. Dersom du har tatt
-                opp maksimalt lån og fått tildelt fullt stipend, kan du bruke
-                knappen under for å autogenerere lånebeløpet basert på start- og
-                sluttdato for studielånet ditt. Har du tatt opp mer lån eller i
-                ulike perioder kan du manuelt endre lånet eller legge inn dette
-                som nye lån.
+                Legg inn informasjon om ditt andre lån her. Dette kan være
+                studielån, billån eller andre typer lån du har. Du kan legge til
+                flere lån dersom du har det.
             </TypographyP>
 
             <div className='mt-2 p-2 md:pl-4 border rounded-md'>
+                <TypographyH3>Beregn ditt studielån </TypographyH3>
+                <TypographyP>
+                    Bruk denne funksjonen for å automatisk fylle ut lånebeløpet
+                    basert på start- og sluttdato for studielånet ditt. Denne
+                    tar utgangspunkt i at du har tatt maksimalt studielån i
+                    perioden, og fått 40% av dette omgjort til stipend.
+                </TypographyP>
                 <div className='flex justify-start gap-4 items-end md:items-center flex-wrap'>
                     {/* FROM */}
                     <div className='flex flex-col gap-2 md:flex-row'>
@@ -144,7 +149,7 @@ export default function StudentLoan() {
                         </NativeSelect>
                     </div>
 
-                    <Button variant='outline' onClick={handleAutoFill}>
+                    <Button variant='default' onClick={handleAutoFill}>
                         Sett lånebeløp
                     </Button>
                 </div>

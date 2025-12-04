@@ -1,12 +1,10 @@
 'use client';
 
-import { Separator } from '@/components/ui/separator';
-// top-level page — views import UI components themselves and read the store
 import FixedExpenses from '@/views/fixedExpensen';
 import HousingLoan from '@/views/housingLoan';
 import Incomes from '@/views/incomes';
 import LivingExpenses from '@/views/livingExpenses';
-import StudentLoan from '@/views/studentLoan';
+import StudentLoan from '@/views/loans';
 import Summary from '@/views/summary';
 import Taxes from '@/views/taxes';
 
