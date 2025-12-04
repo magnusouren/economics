@@ -1,9 +1,11 @@
 'use client';
 
+import { TypographyH1 } from '@/components/typography/typographyH1';
 import { TypographyH2 } from '@/components/typography/typographyH2';
 import { TypographyH3 } from '@/components/typography/typographyH3';
 import { TypographyP } from '@/components/typography/typographyP';
 import useStore, { StoreState } from '@/lib/store';
+import { formatNumberToNOK } from '@/lib/utils';
 
 // --------------------------------------
 // --- Amortization (Annuitetslån) ------
@@ -134,14 +136,6 @@ function generateAmortizationSchedule(loan: {
     };
 }
 
-const formatNumberToNOK = (num: number) => {
-    return num.toLocaleString('no-NO', {
-        style: 'currency',
-        currency: 'NOK',
-        maximumFractionDigits: 0,
-    });
-};
-
 interface HousingLoanDataRowMonthly {
     term: number;
     date: string;
@@ -172,9 +166,7 @@ export default function Loans() {
     return (
         <>
             <div className='w-full mt-8'>
-                <h1 className='text-4xl md:text-5xl font-bold mb-4 text-brandBlue'>
-                    Nedbetalingsplan for Lån
-                </h1>
+                <TypographyH1>Nedbetalingsplan for Lån</TypographyH1>
                 <TypographyP>
                     Her finner du detaljerte beregninger av alle lån, inkludert
                     nedbetaling, renter og restgjeld for hver termin.

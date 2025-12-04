@@ -20,8 +20,8 @@ import {
 } from '@/components/ui/dialog';
 import { TypographyH2 } from '@/components/typography/typographyH2';
 import { TypographyP } from '@/components/typography/typographyP';
-import { TypographyH3 } from '@/components/typography/typographyH3';
 import { Questionmark } from '@/components/Questionmark';
+import { Datepicker } from '@/components/Datepicker';
 
 const loanAmounts: Record<string, number> = {
     '2025-2026': 166859,
@@ -145,7 +145,7 @@ export default function Loans() {
 
     return (
         <section className='w-full my-8'>
-            <TypographyH2>Andre Lån</TypographyH2>
+            <TypographyH2>Lån</TypographyH2>
             <TypographyP>
                 Legg inn informasjon om ditt andre lån her. Dette kan være
                 studielån, billån eller andre typer lån du har. Du kan legge til
@@ -181,6 +181,7 @@ export default function Loans() {
                                     onChange={(e) =>
                                         setAutoFrom(e.target.value)
                                     }
+                                    className='w-full [&>div]:w-full [&_select]:w-full'
                                 >
                                     {sortedRanges.map(([year]) => (
                                         <NativeSelectOption
@@ -253,8 +254,8 @@ export default function Loans() {
                                 <th className='p-2 min-w-32'>Rente (%)</th>
                                 <th className='p-2 min-w-24'>År</th>
                                 <th className='p-2 min-w-28'>Betalinger/år</th>
-                                <th className='p-2 min-w-32'>Månedsavgift</th>
-                                <th className='p-2 min-w-32'>Startdato</th>
+                                <th className='p-2 min-w-24'>Månedsavgift</th>
+                                <th className='p-2 min-w-24'>Startdato</th>
                                 <th className='w-12'></th>
                             </tr>
                         </thead>
@@ -339,12 +340,18 @@ export default function Loans() {
                                         />
                                     </td>
                                     <td className='py-2 px-1'>
-                                        <Input
-                                            type='date'
-                                            value={loan.startDate}
-                                            onChange={(e) =>
+                                        <Datepicker
+                                            label=''
+                                            dateValue={
+                                                loan.startDate
+                                                    ? new Date(loan.startDate)
+                                                    : undefined
+                                            }
+                                            setDateValue={(date: Date) =>
                                                 handleUpdate(idx, {
-                                                    startDate: e.target.value,
+                                                    startDate: date
+                                                        .toISOString()
+                                                        .slice(0, 10),
                                                 })
                                             }
                                         />
@@ -485,14 +492,19 @@ export default function Loans() {
                                 <Label htmlFor='loan-startdate'>
                                     Startdato
                                 </Label>
-                                <Input
-                                    id='loan-startdate'
-                                    type='date'
-                                    value={form.startDate}
-                                    onChange={(e) =>
+                                <Datepicker
+                                    label=''
+                                    dateValue={
+                                        form.startDate
+                                            ? new Date(form.startDate)
+                                            : undefined
+                                    }
+                                    setDateValue={(date: Date) =>
                                         setForm((p) => ({
                                             ...p,
-                                            startDate: e.target.value,
+                                            startDate: date
+                                                .toISOString()
+                                                .slice(0, 10),
                                         }))
                                     }
                                 />

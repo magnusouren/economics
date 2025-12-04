@@ -24,7 +24,13 @@ export default function Navbar() {
                                 href='/loan'
                                 className='text-sm font-medium text-foreground/70 hover:text-foreground'
                             >
-                                Nedbetalingsplan lån
+                                Nedbetalingsplaner
+                            </Link>
+                            <Link
+                                href='/plan'
+                                className='text-sm font-medium text-foreground/70 hover:text-foreground'
+                            >
+                                Spareplan
                             </Link>
                         </nav>
                     </div>

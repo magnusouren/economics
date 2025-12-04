@@ -1,7 +1,6 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { CircleQuestionMark, Trash } from 'lucide-react';
 import useStore, { StoreState } from '@/lib/store';
 import type { HousingLoan } from '@/types';
 import { TypographyH2 } from '@/components/typography/typographyH2';
@@ -17,6 +16,8 @@ import {
 } from '@/components/ui/dialog';
 import { Label } from '@/components/ui/label';
 import { Questionmark } from '@/components/Questionmark';
+import { Trash } from 'lucide-react';
+import { Datepicker } from '@/components/Datepicker';
 
 export default function HousingLoan() {
     const housingLoans = useStore((s: StoreState) => s.data.housingLoans);
@@ -91,7 +92,7 @@ export default function HousingLoan() {
                                 </th>
                                 <th className='p-2 min-w-28'>Betalinger/år</th>
                                 <th className='p-2 min-w-24'>Månedsavgift</th>
-                                <th className='p-2 min-w-36'>Startdato</th>
+                                <th className='p-2 min-w-24'>Startdato</th>
                                 <th className='w-12'></th>
                             </tr>
                         </thead>
@@ -189,12 +190,18 @@ export default function HousingLoan() {
                                         />
                                     </td>
                                     <td className='py-2 px-1'>
-                                        <Input
-                                            type='date'
-                                            value={loan.startDate ?? ''}
-                                            onChange={(e) =>
+                                        <Datepicker
+                                            label=''
+                                            dateValue={
+                                                loan.startDate
+                                                    ? new Date(loan.startDate)
+                                                    : undefined
+                                            }
+                                            setDateValue={(date) =>
                                                 updateLoan(idx, {
-                                                    startDate: e.target.value,
+                                                    startDate: date
+                                                        .toISOString()
+                                                        .slice(0, 10),
                                                 })
                                             }
                                         />
@@ -359,14 +366,19 @@ export default function HousingLoan() {
                                     Startdato
                                     <Questionmark helptext='Datoen når lånet startet.' />
                                 </Label>
-                                <Input
-                                    id='loan-startdate'
-                                    type='date'
-                                    value={form.startDate}
-                                    onChange={(e) =>
+                                <Datepicker
+                                    label=''
+                                    dateValue={
+                                        form.startDate
+                                            ? new Date(form.startDate)
+                                            : undefined
+                                    }
+                                    setDateValue={(date) =>
                                         setForm((p) => ({
                                             ...p,
-                                            startDate: e.target.value,
+                                            startDate: date
+                                                .toISOString()
+                                                .slice(0, 10),
                                         }))
                                     }
                                 />
