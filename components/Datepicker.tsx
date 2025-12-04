@@ -49,6 +49,7 @@ export function Datepicker({
                     className='w-auto overflow-hidden p-0'
                     align='start'
                 >
+                    {/* TODO - Fix bug with date off by one day and timezones */}
                     <Calendar
                         mode='single'
                         selected={dateValue}
