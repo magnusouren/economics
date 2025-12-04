@@ -223,12 +223,12 @@ export default function HousingLoan() {
                         className='mt-2 w-full'
                         onClick={openAddDialog}
                     >
-                        + Legg til lån
+                        + Legg til boliglån
                     </Button>
                 </DialogTrigger>
                 <DialogContent className='sm:max-w-lg'>
                     <DialogHeader>
-                        <DialogTitle>Legg til boliglån</DialogTitle>
+                        <DialogTitle>Legg til nytt boliglån</DialogTitle>
                     </DialogHeader>
 
                     <div className='grid gap-4 py-4'>
@@ -401,7 +401,7 @@ export default function HousingLoan() {
                             </Button>
                         </DialogClose>
                         <Button type='button' onClick={submitAdd}>
-                            Legg til lån
+                            Legg til boliglån
                         </Button>
                     </DialogFooter>
                 </DialogContent>
