@@ -204,7 +204,7 @@ export default function HousingLoans() {
                         const schedule = generateAmortizationSchedule(loan);
 
                         return (
-                            <div key={index} className='my-8'>
+                            <div key={index} className='my-8 overflow-auto'>
                                 <TypographyH3>
                                     Nedbetalingsoversikt, {loan.description}
                                 </TypographyH3>

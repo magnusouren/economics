@@ -51,7 +51,7 @@ export default function HousingLoan() {
                                 </th>
                                 <th className='p-2 min-w-28'>Betalinger/år</th>
                                 <th className='p-2 min-w-24'>Månedsavgift</th>
-                                <th className='p-2 min-w-20'>Startmåned/år</th>
+                                <th className='p-2 min-w-36'>Startmåned/år</th>
                                 <th className='w-12'></th>
                             </tr>
                         </thead>
