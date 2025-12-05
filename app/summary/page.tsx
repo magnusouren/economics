@@ -8,7 +8,6 @@ import {
     PiggyBank,
     ReceiptText,
     ShieldCheck,
-    Sparkles,
     Wallet,
 } from 'lucide-react';
 
@@ -29,18 +28,24 @@ import useStore, { StoreState } from '@/lib/store';
 import { formatNumberToNOK } from '@/lib/utils';
 import type { Loan } from '@/types';
 
-function monthlyLoanBreakdown(loan: Loan) {
+function averageLoanBreakdown(loan: Loan) {
     const amort = computeLoanAmortization(loan);
-    const firstMonth = amort.monthly[0];
 
-    if (!firstMonth) {
+    if (!amort.monthly || amort.monthly.length === 0) {
         return { interest: 0, principal: 0, fee: loan.monthlyFee || 0 };
     }
 
+    // Ta de første 12 månedene (eller færre hvis lånet er kortere)
+    const next12 = amort.monthly.slice(0, 12);
+
+    const totalInterest = next12.reduce((sum, m) => sum + m.interest, 0);
+    const totalPrincipal = next12.reduce((sum, m) => sum + m.principal, 0);
+    const totalFees = next12.reduce((sum, m) => sum + m.fee, 0);
+
     return {
-        interest: firstMonth.interest,
-        principal: firstMonth.principal,
-        fee: firstMonth.fee,
+        interest: totalInterest / next12.length,
+        principal: totalPrincipal / next12.length,
+        fee: totalFees / next12.length,
     };
 }
 
@@ -61,7 +66,7 @@ export default function SummaryPage() {
 
     const loans: Loan[] = [...data.loans, ...data.housingLoans];
     const loanSummaries = loans.map((loan) => {
-        const breakdown = monthlyLoanBreakdown(loan);
+        const breakdown = averageLoanBreakdown(loan);
         const total =
             ((loan.interestRate || 0) >= 0 ? breakdown.principal : 0) +
             breakdown.interest +
@@ -95,7 +100,7 @@ export default function SummaryPage() {
     const balance = netMonthlyIncome - totalMonthlyExpenses;
 
     const housingHighlights = data.housingLoans.map((loan) => {
-        const { principal } = monthlyLoanBreakdown(loan);
+        const { principal } = averageLoanBreakdown(loan);
         const baseValue = loan.loanAmount + loan.capital;
         const monthlyGrowthRate = Math.pow(1 + priceGrowth / 100, 1 / 12) - 1;
         const priceGrowthNOK = baseValue * monthlyGrowthRate;
@@ -114,17 +119,10 @@ export default function SummaryPage() {
         <div className='py-10 space-y-10'>
             <section className='space-y-4'>
                 <div className='flex flex-wrap items-center gap-3'>
-                    <Badge
-                        variant='outline'
-                        className='text-brandBlue bg-brandOrange/15'
-                    >
-                        <Sparkles className='mr-2 h-4 w-4' />
-                        Oppsummering
-                    </Badge>
                     <TypographyH1>Din økonomiske status nå</TypographyH1>
                     <TypographyP>
-                        Se alle inntekter, utgifter og lån på ett sted. Vi viser
-                        både månedlige beløp og hvordan boliglån bygger
+                        Se alle inntekter, utgifter og lån på ett sted. Her
+                        vises både månedlige beløp og hvordan boliglån bygger
                         egenkapital gjennom avdrag og prisvekst.
                     </TypographyP>
                 </div>
@@ -191,7 +189,6 @@ export default function SummaryPage() {
                     </Card>
                 </div>
             </section>
-
             <section className='grid gap-6 lg:grid-cols-[1.1fr_0.9fr]'>
                 <Card className='border-primary/20'>
                     <CardHeader className='space-y-1'>
@@ -311,7 +308,7 @@ export default function SummaryPage() {
                     <CardContent className='space-y-3'>
                         <div className='flex items-center justify-between text-sm'>
                             <span className='text-muted-foreground'>
-                                Renter per måned
+                                Renter per måned*
                             </span>
                             <span className='font-semibold'>
                                 {fmt(loanMonthlyTotals.interest)}
@@ -319,7 +316,7 @@ export default function SummaryPage() {
                         </div>
                         <div className='flex items-center justify-between text-sm'>
                             <span className='text-muted-foreground'>
-                                Avdrag per måned
+                                Avdrag per måned*
                             </span>
                             <span className='font-semibold'>
                                 {fmt(loanMonthlyTotals.principal)}
@@ -361,7 +358,6 @@ export default function SummaryPage() {
                     </CardContent>
                 </Card>
             </section>
-
             <section className='grid gap-6 lg:grid-cols-[1fr_1fr]'>
                 <Card className='border-primary/20'>
                     <CardHeader className='space-y-1'>
@@ -424,8 +420,8 @@ export default function SummaryPage() {
                                                     {loan.description}
                                                 </p>
                                                 <p className='text-xs text-muted-foreground'>
-                                                    Rente {fmt(interest)} ·
-                                                    Avdrag {fmt(principal)} ·
+                                                    Rente* {fmt(interest)} ·
+                                                    Avdrag* {fmt(principal)} ·
                                                     Gebyr {fmt(fee)}
                                                 </p>
                                             </div>
@@ -470,8 +466,8 @@ export default function SummaryPage() {
                                         {item.description}
                                     </p>
                                     <p className='text-xs text-muted-foreground'>
-                                        Avdrag {fmt(item.principal)} · Prisvekst{' '}
-                                        {fmt(item.priceGrowth)}
+                                        Avdrag* {fmt(item.principal)} ·
+                                        Prisvekst {fmt(item.priceGrowth)}
                                     </p>
                                 </div>
                                 <Badge className='bg-brandBlue text-white hover:bg-brandBlue/90'>
@@ -487,7 +483,6 @@ export default function SummaryPage() {
                     </CardContent>
                 </Card>
             </section>
-
             <Card className='border-primary/20'>
                 <CardHeader className='space-y-1'>
                     <CardTitle className='flex items-center gap-2'>
@@ -499,7 +494,6 @@ export default function SummaryPage() {
                 </CardHeader>
                 <CardContent className='space-y-4'>TODO</CardContent>
             </Card>
-
             <Card className='border-primary/20 bg-linear-to-r from-background to-brandBlue/5'>
                 <CardHeader>
                     <CardTitle className='flex items-center gap-2'>
@@ -539,6 +533,10 @@ export default function SummaryPage() {
                     </div>
                 </CardContent>
             </Card>
+            <p className='text-sm text-muted-foreground'>
+                * Beregningene for renter og avdrag er basert på gjennomsnitt de
+                neste 12 månedene.
+            </p>
         </div>
     );
 }
