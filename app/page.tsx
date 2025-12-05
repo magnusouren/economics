@@ -107,7 +107,7 @@ export default function Home() {
                         kalkulatorene for å ta bedre beslutninger.
                     </TypographyP>
 
-                    <div className='flex flex-wrap gap-3'>
+                    <div className='flex flex-wrap gap-3 my-4'>
                         <Button asChild>
                             <Link href='/data'>Legg inn data</Link>
                         </Button>

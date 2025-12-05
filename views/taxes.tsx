@@ -32,7 +32,10 @@ export default function Taxes() {
 
                         {data.incomes.map((inc, i) => (
                             <tr key={i}>
-                                <td className='p-2'>{inc.source}</td>
+                                <td className='p-2'>
+                                    {inc.source}{' '}
+                                    {inc.taxFree && ' (skattefritt)'}
+                                </td>
                                 <td className='p-2 text-right'>
                                     {formatNumberToNOK(inc.amount)}
                                 </td>

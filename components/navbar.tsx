@@ -1,53 +1,71 @@
 'use client';
 
+import { useState } from 'react';
 import Link from 'next/link';
+import { Menu, X } from 'lucide-react';
 
 export default function Navbar() {
+    const [open, setOpen] = useState(false);
+
     return (
         <header className='sticky top-0 z-40 bg-white/75 backdrop-blur-md border-b border-muted/20'>
             <div className='max-w-5xl mx-auto px-4 sm:px-6 lg:px-8'>
                 <div className='flex items-center justify-between h-16'>
-                    <div className='flex items-center gap-3'>
-                        <div className='text-lg sm:text-2xl font-semibold text-brandBlue'>
-                            <Link href='/'>NETTO</Link>
-                        </div>
+                    {/* Logo */}
+                    <div className='text-lg sm:text-2xl font-semibold text-brandBlue'>
+                        <Link href='/'>NETTO</Link>
                     </div>
-                    <div>
-                        <nav className='flex items-center gap-4'>
-                            <Link
-                                href='/data'
-                                className='text-sm font-medium text-foreground/70 hover:text-foreground'
-                            >
-                                Grunnlagsdata
-                            </Link>
-                            <Link
-                                href='/tax'
-                                className='text-sm font-medium text-foreground/70 hover:text-foreground'
-                            >
-                                Skattedetaljer
-                            </Link>
-                            <Link
-                                href='/loan'
-                                className='text-sm font-medium text-foreground/70 hover:text-foreground'
-                            >
-                                Nedbetalingsplaner
-                            </Link>
-                            <Link
-                                href='/plan'
-                                className='text-sm font-medium text-foreground/70 hover:text-foreground'
-                            >
-                                Egenkapitalutvikling
-                            </Link>
-                            <Link
-                                href='/paymentPlan'
-                                className='text-sm font-medium text-foreground/70 hover:text-foreground'
-                            >
-                                Månedlig økonomi
-                            </Link>
-                        </nav>
-                    </div>
+
+                    {/* Desktop nav */}
+                    <nav className='hidden sm:flex items-center gap-4'>
+                        <NavLinks />
+                    </nav>
+
+                    {/* Mobile hamburger */}
+                    <button
+                        className='sm:hidden p-2 rounded-md hover:bg-muted/20'
+                        onClick={() => setOpen(!open)}
+                        aria-label='Toggle Menu'
+                    >
+                        {open ? <X size={22} /> : <Menu size={22} />}
+                    </button>
                 </div>
+
+                {/* Mobile dropdown menu */}
+                {open && (
+                    <nav className='sm:hidden pb-4 animate-in slide-in-from-top-2 fade-in-0'>
+                        <div className='flex flex-col gap-3 mt-2'>
+                            <NavLinks onClick={() => setOpen(false)} />
+                        </div>
+                    </nav>
+                )}
             </div>
         </header>
+    );
+}
+
+/* Shared nav links */
+function NavLinks({ onClick }: { onClick?: () => void }) {
+    const base =
+        'text-sm font-medium text-foreground/70 hover:text-foreground transition-colors';
+
+    return (
+        <>
+            <Link href='/data' className={base} onClick={onClick}>
+                Grunnlagsdata
+            </Link>
+            <Link href='/tax' className={base} onClick={onClick}>
+                Skattedetaljer
+            </Link>
+            <Link href='/loan' className={base} onClick={onClick}>
+                Nedbetalingsplaner
+            </Link>
+            <Link href='/plan' className={base} onClick={onClick}>
+                Egenkapitalutvikling
+            </Link>
+            <Link href='/paymentPlan' className={base} onClick={onClick}>
+                Månedlig økonomi
+            </Link>
+        </>
     );
 }

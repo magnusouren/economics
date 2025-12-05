@@ -99,13 +99,13 @@ export default function Plan() {
                                 <tr className='bg-muted'>
                                     <th className='p-2 text-left'>Måned</th>
                                     <th className='p-2 text-right'>
-                                        Restgjeld (kr)
+                                        Restgjeld
                                     </th>
                                     <th className='p-2 text-right'>
-                                        Boligverdi (kr)
+                                        Boligverdi
                                     </th>
                                     <th className='p-2 text-right'>
-                                        EK ved salg (kr)
+                                        EK ved salg
                                     </th>
                                     <th className='p-2 text-right'>
                                         Diff. siden kjøp
