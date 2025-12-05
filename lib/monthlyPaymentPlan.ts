@@ -7,23 +7,23 @@ export const generatePaymentPlan = (
     startDate: string,
     years = 30
 ) => {
-    const incomes = data.incomes; // all incomes are ANNUAL
+    const incomes = data.incomes;
     const housingLoans = data.housingLoans;
     const loans = [...housingLoans, ...data.loans];
     const fixed = data.fixedExpenses;
     const living = data.livingCosts;
 
-    // --- PREP TOTAL FIXED + LIVING COSTS (monthly amounts) ---
+    // Fixed monthly costs
     const baseFixedCosts =
         fixed.reduce((sum, f) => sum + f.amount, 0) +
         living.reduce((sum, l) => sum + l.amount, 0);
 
-    // --- START DATE RANGE ---
+    // Start range
     const start = new Date(startDate);
     start.setDate(1);
     const totalMonths = years * 12;
 
-    // --- Prepare loan amortization trackers ---
+    // Prepare loan amortization trackers
     const loanStates = loans.map((loan) => {
         const startDate = new Date(loan.startDate);
         const totalTerms = loan.termYears * loan.termsPerYear;
@@ -43,34 +43,50 @@ export const generatePaymentPlan = (
         };
     });
 
-    // --- Annual incomes tracker ---
-    let annualIncome = incomes.reduce((sum, inc) => sum + inc.amount, 0); // ANNUAL
+    // Annual taxable & tax-free income
+    let annualTaxableIncome = incomes
+        .filter((i) => !i.taxFree)
+        .reduce((sum, i) => sum + i.amount, 0);
+
+    const annualTaxFreeIncome = incomes
+        .filter((i) => i.taxFree)
+        .reduce((sum, i) => sum + i.amount, 0);
 
     const rows = [];
 
     for (let i = 0; i < totalMonths; i++) {
         const date = new Date(start);
         date.setMonth(start.getMonth() + i);
-        const monthIndex = date.getMonth(); // 0 = Jan, 7 = Aug
+        const monthIndex = date.getMonth();
 
         const monthStr = date.toLocaleDateString('no-NO', {
             year: 'numeric',
             month: 'short',
         });
 
-        // -------------------------------
-        // Apply raise ONLY in August (monthIndex === 7)
-        // -------------------------------
+        // Salary raise in August (monthIndex === 7)
         if (monthIndex === 7 && i !== 0) {
-            annualIncome *= 1 + salaryAnnualGrowth / 100;
+            annualTaxableIncome *= 1 + salaryAnnualGrowth / 100;
         }
 
+        // Compute tax ONLY on taxable income
         const taxResult = calculateAnnualTaxes({
             ...data,
-            incomes: [{ source: 'Total', amount: annualIncome }],
+            incomes: [
+                {
+                    source: 'Taxable Income',
+                    amount: annualTaxableIncome,
+                },
+            ],
         });
 
-        const monthlyIncome = taxResult.netMonthlyIncome;
+        // Net monthly income after tax
+        const monthlyTaxedIncome = taxResult.netMonthlyIncome;
+
+        // Add tax-free monthly income
+        const monthlyTaxFreeIncome = annualTaxFreeIncome / 12;
+
+        const monthlyIncome = monthlyTaxedIncome + monthlyTaxFreeIncome;
 
         let totalInterest = 0;
         let totalPrincipal = 0;
@@ -90,14 +106,13 @@ export const generatePaymentPlan = (
             totalInterest += interest;
             totalPrincipal += principal;
 
-            // count only housing loans for wealth building
+            // Housing principal = equity growth
             if ('capital' in ls.loan) {
                 housingPrincipal += principal;
             }
         });
 
         const loanCosts = totalInterest + totalPrincipal;
-
         const totalExpenses = baseFixedCosts + loanCosts;
         const balance = monthlyIncome - totalExpenses;
 

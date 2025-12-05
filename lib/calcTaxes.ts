@@ -12,7 +12,9 @@ export const calculateAnnualTaxes = (data: EconomyData) => {
     const loansArr = data.loans;
     const housingLoans = data.housingLoans;
 
-    const totalIncome = incomes.reduce((s, i) => s + i.amount, 0);
+    const totalIncome = incomes
+        .filter((income) => !income.taxFree)
+        .reduce((s, i) => s + i.amount, 0);
 
     // ----- Fradrag -----
     const minstefradrag = Math.min(totalIncome * 0.46, 92000);

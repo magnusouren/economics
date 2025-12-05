@@ -1,5 +1,6 @@
 'use client';
 
+import { Button } from '@/components/ui/button';
 import FixedExpenses from '@/views/fixedExpenses';
 import HousingLoan from '@/views/housingLoan';
 import Incomes from '@/views/incomes';
@@ -26,6 +27,7 @@ export default function Home() {
                     skatter, lån, og andre utgifter.
                 </p>
             </div>
+
             <section className='mt-24'>
                 <Incomes />
                 <HousingLoan />

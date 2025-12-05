@@ -9,6 +9,7 @@ export interface EconomyData {
 export type Income = {
     source: string;
     amount: number;
+    taxFree?: boolean;
 };
 
 export type HousingLoan = Loan & {

@@ -5,6 +5,7 @@ import useStore, { StoreState } from '@/lib/store';
 import type { Income } from '@/types';
 import { TypographyH2 } from '@/components/typography/typographyH2';
 import { TypographyP } from '@/components/typography/typographyP';
+import { Checkbox } from '@/components/ui/checkbox';
 
 export default function Incomes() {
     const incomes = useStore((s: StoreState) => s.data.incomes);
@@ -20,7 +21,10 @@ export default function Incomes() {
     return (
         <section className='w-full my-8'>
             <TypographyH2>Inntekter</TypographyH2>
-            <TypographyP>Legg til dine faste inntekter, per år</TypographyP>
+            <TypographyP>
+                Legg til dine faste inntekter, per år. Skattefrie inntekter
+                (eks. studielån) kan legges inn og markeres som skattefrie.
+            </TypographyP>
             {incomes.length !== 0 && (
                 <div className='overflow-auto rounded-md border'>
                     <table className='w-full table-fixed text-sm'>
@@ -31,6 +35,9 @@ export default function Incomes() {
                                 </th>
                                 <th className='p-2 w-1/3 md:w-1/4 text-left'>
                                     Beløp (kr)
+                                </th>
+                                <th className='w-12 text-center'>
+                                    Skattefritt
                                 </th>
                                 <th className='w-12'> </th>
                             </tr>
@@ -65,6 +72,18 @@ export default function Incomes() {
                                                     amount: Number(
                                                         e.target.value || 0
                                                     ),
+                                                })
+                                            }
+                                        />
+                                    </td>
+                                    <td className='p-2 text-center'>
+                                        <Checkbox
+                                            id={`income-taxFree-${index}`}
+                                            checked={!!income.taxFree}
+                                            className='h-4 w-4 border'
+                                            onCheckedChange={(checked) =>
+                                                updateIncome(index, {
+                                                    taxFree: !!checked,
                                                 })
                                             }
                                         />

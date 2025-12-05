@@ -1,6 +1,7 @@
 import { TypographyH2 } from '@/components/typography/typographyH2';
 import useStore, { StoreState } from '@/lib/store';
 import type { Loan } from '@/types';
+import { calculateAnnualTaxes } from '@/lib/calcTaxes';
 
 function monthlyLoanPayment(loan: Loan): number {
     const principal = loan.loanAmount || 0;
@@ -9,69 +10,43 @@ function monthlyLoanPayment(loan: Loan): number {
     const n = termYears * termsPerYear;
     if (n <= 0 || principal <= 0) return 0;
 
-    const r = (loan.interestRate || 0) / 100 / termsPerYear; // rate per term
+    const r = (loan.interestRate || 0) / 100 / termsPerYear;
 
     let paymentPerTerm = 0;
     if (r === 0) paymentPerTerm = principal / n;
     else paymentPerTerm = (principal * r) / (1 - Math.pow(1 + r, -n));
 
-    // convert to monthly
-    const monthly =
-        paymentPerTerm * (12 / termsPerYear) + (loan.monthlyFee || 0);
-    return monthly;
+    return paymentPerTerm * (12 / termsPerYear) + (loan.monthlyFee || 0);
 }
 
 export default function Summary() {
     const data = useStore((s: StoreState) => s.data);
-    // Annual / monthly incomes
+
+    // ---- Income ----
     const totalIncomeAnnual = data.incomes.reduce((s, i) => s + i.amount, 0);
     const monthlyIncomeGross = totalIncomeAnnual / 12;
 
-    // Minstefradrag (annual)
-    const minstefradragAnnual = Math.min(totalIncomeAnnual * 0.46, 92000);
+    // ---- TAX (NEW: use your function) ----
+    const tax = calculateAnnualTaxes(data);
+    const monthlyTax = tax.totalTaxes / 12;
 
-    // Loan interest (approx) and rentefradrag (22%) - annual
+    // ---- Loan monthly payments ----
     const loans: Loan[] = [...data.loans, ...data.housingLoans];
-    const loanInterestAnnual = loans.reduce(
-        (s, l) => s + ((l.loanAmount || 0) * (l.interestRate || 0)) / 100,
-        0
-    );
-    const rentefradragAnnual = loanInterestAnnual * 0.22;
-
-    // Deductions used for tax calculation
-    const totalDeductionsAnnual = minstefradragAnnual + rentefradragAnnual;
-
-    // --- Tax calculation (same formula used in taxes.tsx) ---
-    const inntekt = totalIncomeAnnual;
-    const fradrag = totalDeductionsAnnual;
-    const alminnelig = Math.max(inntekt - fradrag, 0);
-    const skatt_alminnelig = alminnelig * 0.1772;
-    const trygdeavgift = inntekt * 0.077;
-    const trinn1 = Math.max(Math.min(inntekt, 306050) - 217400, 0) * 0.017;
-    const trinn2 = Math.max(Math.min(inntekt, 697150) - 306050, 0) * 0.04;
-    const trinn3 = Math.max(Math.min(inntekt, 942400) - 697150, 0) * 0.137;
-    const trinn4 = Math.max(Math.min(inntekt, 1410750) - 942400, 0) * 0.167;
-    const trinn5 = Math.max(inntekt - 1410750, 0) * 0.177;
-    const trinnskatt = trinn1 + trinn2 + trinn3 + trinn4 + trinn5;
-    const taxAnnual = skatt_alminnelig + trygdeavgift + trinnskatt;
-    const monthlyTax = taxAnnual / 12;
-
-    // Fixed expenses grouped per category (assume amounts are monthly)
-    const housingFixed = data.fixedExpenses
-        .filter((f) => f.category === 'housing')
-        .reduce((s, f) => s + f.amount, 0);
-    const personalFixed = data.fixedExpenses
-        .filter((f) => f.category === 'personal')
-        .reduce((s, f) => s + f.amount, 0);
-
-    // Living costs (assume monthly)
-    const livingMonthly = data.livingCosts.reduce((s, l) => s + l.amount, 0);
-
-    // Loan monthly payments
     const loanMonthlyPayments = loans.reduce(
         (s, l) => s + monthlyLoanPayment(l),
         0
     );
+
+    // ---- Fixed monthly expenses ----
+    const housingFixed = data.fixedExpenses
+        .filter((f) => f.category === 'housing')
+        .reduce((s, f) => s + f.amount, 0);
+
+    const personalFixed = data.fixedExpenses
+        .filter((f) => f.category === 'personal')
+        .reduce((s, f) => s + f.amount, 0);
+
+    const livingMonthly = data.livingCosts.reduce((s, l) => s + l.amount, 0);
 
     const totalMonthlyExpenses =
         housingFixed + personalFixed + livingMonthly + loanMonthlyPayments;
@@ -100,6 +75,7 @@ export default function Summary() {
                                 Inntekter
                             </td>
                         </tr>
+
                         <tr className='odd:bg-background even:bg-muted/5'>
                             <td className='p-2'>Brutto inntekt</td>
                             <td className='p-2 text-right'>
@@ -108,7 +84,7 @@ export default function Summary() {
                         </tr>
 
                         <tr>
-                            <td className='p-2'>Skatt å betale per måned</td>
+                            <td className='p-2'>Skatt per måned</td>
                             <td className='p-2 text-right'>
                                 {fmt(monthlyTax)}
                             </td>
@@ -179,8 +155,8 @@ export default function Summary() {
             </div>
 
             <p className='ml-2 mt-4 text-sm text-muted-foreground'>
-                Mer detaljer basert på nedbetaling på boliglån samt prisstigning
-                på bolig kommer snart...
+                Mer detaljer basert på nedbetaling på boliglån og prisstigning
+                kommer snart...
             </p>
         </section>
     );

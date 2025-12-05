@@ -72,19 +72,11 @@ export default function PaymentPlan() {
                     <thead>
                         <tr className='bg-muted'>
                             <th className='p-2 text-left'>Måned</th>
-                            <th className='p-2 text-right'>
-                                Månedlig inntekt (kr)
-                            </th>
-                            <th className='p-2 text-right'>
-                                Månedlig utgift (kr)
-                            </th>
-                            <th className='p-2 text-right'>
-                                Rentekostnader (kr)
-                            </th>
-                            <th className='p-2 text-right'>Avdrag (kr)</th>
+                            <th className='p-2 text-right'>Inntekter</th>
+                            <th className='p-2 text-right'>Utgifter</th>
+                            <th className='p-2 text-right'>Avdrag</th>
                             <th className='p-2 text-right'>Balanse</th>
-
-                            <th className='p-2 text-right'>Balanse + Avdrag</th>
+                            <th className='p-2 text-right'>Ekskl. Avdrag</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -100,10 +92,6 @@ export default function PaymentPlan() {
                                 </td>
                                 <td className='p-2 text-right'>
                                     {formatNumberToNOK(row.expenses)}
-                                </td>
-
-                                <td className='p-2 text-right'>
-                                    {formatNumberToNOK(row.totalInterest)}
                                 </td>
                                 <td className='p-2 text-right'>
                                     {formatNumberToNOK(row.totalPrincipal)}
