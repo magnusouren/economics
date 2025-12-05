@@ -15,10 +15,16 @@ export default function Navbar() {
                     <div>
                         <nav className='flex items-center gap-4'>
                             <Link
-                                href='/'
+                                href='/data'
                                 className='text-sm font-medium text-foreground/70 hover:text-foreground'
                             >
-                                Kalkulator
+                                Grunnlagsdata
+                            </Link>
+                            <Link
+                                href='/tax'
+                                className='text-sm font-medium text-foreground/70 hover:text-foreground'
+                            >
+                                Skattedetaljer
                             </Link>
                             <Link
                                 href='/loan'
@@ -30,13 +36,13 @@ export default function Navbar() {
                                 href='/plan'
                                 className='text-sm font-medium text-foreground/70 hover:text-foreground'
                             >
-                                Spareplan
+                                Egenkapitalutvikling
                             </Link>
                             <Link
                                 href='/paymentPlan'
                                 className='text-sm font-medium text-foreground/70 hover:text-foreground'
                             >
-                                Betalingsplan
+                                Månedlig økonomi
                             </Link>
                         </nav>
                     </div>

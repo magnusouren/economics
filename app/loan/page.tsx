@@ -165,15 +165,17 @@ export default function Loans() {
 
     return (
         <>
-            <div className='w-full mt-8'>
-                <TypographyH1>Nedbetalingsplan for Lån</TypographyH1>
+            <div className='container my-8 min-h-24'>
+                <TypographyH1>Nedbetalingsplaner</TypographyH1>
                 <TypographyP>
-                    Her finner du detaljerte beregninger av alle lån, inkludert
-                    nedbetaling, renter og restgjeld for hver termin.
+                    Her finner du detaljerte nedbetalingsplaner for alle dine
+                    boliglån og andre lån. Tabellen viser hvordan hver betaling
+                    fordeles mellom renter, avdrag og eventuelle gebyrer, samt
+                    hvordan restgjelden reduseres over tid.
                 </TypographyP>
             </div>
 
-            <section className='my-8'>
+            <section className='container'>
                 <TypographyH2>Dine boliglån</TypographyH2>
 
                 {housingLoans.length === 0 && (
@@ -188,10 +190,8 @@ export default function Loans() {
                         const schedule = generateAmortizationSchedule(loan);
 
                         return (
-                            <div key={index} className='my-4 overflow-auto'>
-                                <TypographyH3>
-                                    Nedbetalingsoversikt, {loan.description}
-                                </TypographyH3>
+                            <div key={index} className='overflow-auto my-4'>
+                                <TypographyH3>{loan.description}</TypographyH3>
 
                                 <table className='w-full table-auto text-sm border-collapse'>
                                     <thead className='bg-gray-100'>

@@ -59,6 +59,8 @@ export const calculateAnnualTaxes = (data: EconomyData) => {
     const totalTaxes = skatt_alminnelig + trygdeavgift + trinnskatt;
     const netAnnualIncome = totalIncome - totalTaxes;
 
+    const effectiveTaxRate = (totalTaxes / totalIncome) * 100;
+
     return {
         totalIncome,
         totalTaxes,
@@ -73,6 +75,7 @@ export const calculateAnnualTaxes = (data: EconomyData) => {
         trinnskatt,
         alminnelig,
         totalDeductions,
+        effectiveTaxRate,
     };
 };
 

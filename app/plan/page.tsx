@@ -19,8 +19,8 @@ export default function Plan() {
 
     return (
         <>
-            <div className='container my-8'>
-                <TypographyH1>Planlegger</TypographyH1>
+            <div className='container my-8 min-h-24'>
+                <TypographyH1>Egenkapitalutvikling</TypographyH1>
                 <TypographyP>
                     Her vil du kunne se hvordan prisstigning på boligen din
                     samtidig med nedbetaling av lån påvirker egenkapitalen din
@@ -28,7 +28,7 @@ export default function Plan() {
                 </TypographyP>
             </div>
 
-            <section className='mt-8'>
+            <section className='container'>
                 <div>
                     <TypographyH2>Variabler</TypographyH2>
                     <TypographyP>

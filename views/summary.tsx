@@ -153,11 +153,6 @@ export default function Summary() {
                     </tbody>
                 </table>
             </div>
-
-            <p className='ml-2 mt-4 text-sm text-muted-foreground'>
-                Mer detaljer basert på nedbetaling på boliglån og prisstigning
-                kommer snart...
-            </p>
         </section>
     );
 }

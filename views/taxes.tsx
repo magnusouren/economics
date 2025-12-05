@@ -1,3 +1,5 @@
+'use client';
+
 import useStore, { StoreState } from '@/lib/store';
 import { TypographyH2 } from '@/components/typography/typographyH2';
 
@@ -5,14 +7,13 @@ import { calculateAnnualTaxes } from '@/lib/calcTaxes';
 
 export default function Taxes() {
     const data = useStore((s: StoreState) => s.data);
-
     const tax = calculateAnnualTaxes(data);
 
     return (
-        <section className='w-full my-8'>
+        <>
             <TypographyH2>Skatteberegning</TypographyH2>
 
-            <div className='overflow-auto rounded-md border'>
+            <div className='overflow-auto rounded-md border mt-4'>
                 <table className='w-full table-fixed text-sm'>
                     <thead>
                         <tr className='bg-muted text-sm'>
@@ -118,7 +119,9 @@ export default function Taxes() {
                         </tr>
 
                         <tr>
-                            <td className='p-2'>Alminnelig inntekt</td>
+                            <td className='p-2'>
+                                Skattegrunnlag (alminnelig inntekt)
+                            </td>
                             <td className='p-2 text-right'>
                                 {Math.round(tax.alminnelig).toLocaleString()} kr
                             </td>
@@ -146,6 +149,13 @@ export default function Taxes() {
                             <td className='p-2'>Trinnskatt</td>
                             <td className='p-2 text-right'>
                                 {Math.round(tax.trinnskatt).toLocaleString()} kr
+                            </td>
+                        </tr>
+
+                        <tr className='p-2'>
+                            <td className='p-2'>Effektiv skattesats</td>
+                            <td className='p-2 text-right'>
+                                {tax.effectiveTaxRate.toFixed(1)} %
                             </td>
                         </tr>
 
@@ -185,6 +195,6 @@ export default function Taxes() {
                     </tbody>
                 </table>
             </div>
-        </section>
+        </>
     );
 }

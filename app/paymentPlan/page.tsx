@@ -22,92 +22,98 @@ export default function PaymentPlan() {
 
     return (
         <>
-            <div className='container my-8'>
-                <TypographyH1>Betalingsoversikt</TypographyH1>
+            <div className='container my-8 min-h-24'>
+                <TypographyH1>Månedlig økonomi</TypographyH1>
                 <TypographyP>
                     Her vil du kunne se hvordan dine månedlige utgifter egentlig
                     ser ut med tanke på lån, renter og andre kostnader.
                 </TypographyP>
             </div>
 
-            <section className='mt-8'>
-                <TypographyH2>Variabler</TypographyH2>
-                <TypographyP>
-                    Juster variablene under for å se hvordan de påvirker din
-                    økonomi.
-                </TypographyP>
-                <div className='my-4'>
-                    <Label htmlFor='sallary-annual-growth'>
-                        Årlig lønnsvekst (%)
-                    </Label>
-                    <Input
-                        id='sallary-annual-growth'
-                        type='number'
-                        value={sallaryAnnualGrowth}
-                        className='mt-2'
-                        onChange={(e) =>
-                            setSallaryAnnualGrowth(Number(e.target.value))
-                        }
-                    />
+            <section className='container'>
+                <div>
+                    <TypographyH2>Variabler</TypographyH2>
+                    <TypographyP>
+                        Juster variablene under for å se hvordan de påvirker din
+                        økonomi.
+                    </TypographyP>
                     <div className='my-4'>
-                        <Label htmlFor='start-date'>
-                            Startdato for oversikten
+                        <Label htmlFor='sallary-annual-growth'>
+                            Årlig lønnsvekst (%)
                         </Label>
                         <Input
-                            id='start-date'
-                            type='date'
+                            id='sallary-annual-growth'
+                            type='number'
+                            value={sallaryAnnualGrowth}
                             className='mt-2'
-                            value={startDate}
-                            onChange={(e) => setStartDate(e.target.value)}
+                            onChange={(e) =>
+                                setSallaryAnnualGrowth(Number(e.target.value))
+                            }
                         />
+                        <div className='my-4'>
+                            <Label htmlFor='start-date'>
+                                Startdato for oversikten
+                            </Label>
+                            <Input
+                                id='start-date'
+                                type='date'
+                                className='mt-2'
+                                value={startDate}
+                                onChange={(e) => setStartDate(e.target.value)}
+                            />
+                        </div>
                     </div>
                 </div>
-
-                <TypographyH2>Betalingsplan</TypographyH2>
-                <TypographyP>
-                    Nedenfor er en oversikt over dine månedlige inntekter og
-                    utgifter, inkludert nedbetaling av lån og rentekostnader.
-                </TypographyP>
-                <table className='w-full table-auto text-sm'>
-                    <thead>
-                        <tr className='bg-muted'>
-                            <th className='p-2 text-left'>Måned</th>
-                            <th className='p-2 text-right'>Inntekter</th>
-                            <th className='p-2 text-right'>Utgifter</th>
-                            <th className='p-2 text-right'>Avdrag</th>
-                            <th className='p-2 text-right'>Balanse</th>
-                            <th className='p-2 text-right'>Ekskl. Avdrag</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {generatePaymentPlan(
-                            data,
-                            sallaryAnnualGrowth,
-                            startDate
-                        ).map((row, idx) => (
-                            <tr key={idx} className='border-b'>
-                                <td className='p-2'>{row.month}</td>
-                                <td className='p-2 text-right'>
-                                    {formatNumberToNOK(row.income)}
-                                </td>
-                                <td className='p-2 text-right'>
-                                    {formatNumberToNOK(row.expenses)}
-                                </td>
-                                <td className='p-2 text-right'>
-                                    {formatNumberToNOK(row.totalPrincipal)}
-                                </td>
-                                <td className='p-2 text-right'>
-                                    {formatNumberToNOK(row.balance)}
-                                </td>
-                                <td className='p-2 text-right'>
-                                    {formatNumberToNOK(
-                                        row.balancePlusPrincipal
-                                    )}
-                                </td>
+                <div className='my-8'>
+                    <TypographyH2>Betalingsplan</TypographyH2>
+                    <TypographyP>
+                        Nedenfor er en oversikt over dine månedlige inntekter og
+                        utgifter, inkludert nedbetaling av lån og
+                        rentekostnader.
+                    </TypographyP>
+                    <table className='w-full table-auto text-sm'>
+                        <thead>
+                            <tr className='bg-muted'>
+                                <th className='p-2 text-left'>Måned</th>
+                                <th className='p-2 text-right'>Inntekter</th>
+                                <th className='p-2 text-right'>Utgifter</th>
+                                <th className='p-2 text-right'>Avdrag</th>
+                                <th className='p-2 text-right'>Balanse</th>
+                                <th className='p-2 text-right'>
+                                    Ekskl. Avdrag
+                                </th>
                             </tr>
-                        ))}
-                    </tbody>
-                </table>
+                        </thead>
+                        <tbody>
+                            {generatePaymentPlan(
+                                data,
+                                sallaryAnnualGrowth,
+                                startDate
+                            ).map((row, idx) => (
+                                <tr key={idx} className='border-b'>
+                                    <td className='p-2'>{row.month}</td>
+                                    <td className='p-2 text-right'>
+                                        {formatNumberToNOK(row.income)}
+                                    </td>
+                                    <td className='p-2 text-right'>
+                                        {formatNumberToNOK(row.expenses)}
+                                    </td>
+                                    <td className='p-2 text-right'>
+                                        {formatNumberToNOK(row.totalPrincipal)}
+                                    </td>
+                                    <td className='p-2 text-right'>
+                                        {formatNumberToNOK(row.balance)}
+                                    </td>
+                                    <td className='p-2 text-right'>
+                                        {formatNumberToNOK(
+                                            row.balancePlusPrincipal
+                                        )}
+                                    </td>
+                                </tr>
+                            ))}
+                        </tbody>
+                    </table>
+                </div>
             </section>
         </>
     );
