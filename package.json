@@ -6,7 +6,9 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "test:compile": "rm -rf .test-dist && tsc --project tsconfig.test.json",
+    "test": "npm run test:compile && node --test .test-dist/lib/**/*.test.js"
   },
   "dependencies": {
     "@radix-ui/react-accordion": "^1.2.12",
